@@ -1,0 +1,47 @@
+html,body{
+    margin: 0;
+}
+h1{
+    font-size: 50px;
+    text-align: center;
+}
+form{
+    background-image: url(../img/login.gif);
+    text-align: center;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 500px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.username,.password{
+    margin-top: 15px;
+    width: 400px;
+    font-size: 28px;
+    display: inline-flex;
+    justify-content: space-around;
+}
+.username input,.password input{
+    height: 30px;
+    vertical-align: text-bottom;
+    width: 200px;
+}
+span{
+    color: rgb(253,120,233);
+}
+.username {
+    margin-top: 100px;
+}
+button{
+    margin-top: 15px;
+    width: 100px;
+    height: 30px;
+    font-size: 17px;
+    display: block;
+    color: green;
+    border: 0;
+    border-radius: 12px;
+    margin-left: auto;
+    margin-right: auto;
+}

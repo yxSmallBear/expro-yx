@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--xmlns:tx="http://www.springframework.org/schema/tool"-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!--数据库配置参数-->
+    <context:property-placeholder location="classpath:db.properties"/>
+
+    <!--开启扫描-->
+    <context:component-scan base-package="com">
+        <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+        <context:exclude-filter expression="org.springframework.web.bind.annotation.ControllerAdvice" type="annotation"/>
+    </context:component-scan>
+
+    <!-- 打开AOP注解 -->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+    <!--连接连接池-->
+    <bean id="comboPooledDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!-- 配置SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="comboPooledDataSource"/>
+        <property name="mapperLocations" value="classpath:com/entry/*.xml"/>
+        <property name="typeAliasesPackage" value="com.entry"/>
+    </bean>
+
+    <!-- 配置MapperScannerConfigurer-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+
+    <!-- 注册事务管理者 -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="comboPooledDataSource"/>
+    </bean>
+
+    <!-- 采用注释的方式进行事务控制 -->
+    <tx:annotation-driven transaction-manager="txManager"/>
+
+</beans>
